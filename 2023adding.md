@@ -13,25 +13,21 @@
 if( flag )
 {
  	A;
-}
-else
-{
+} else {
  	B；
 }
 //int 型数据：
 if( 0 != flag )
 {
  	A;
-}
-else {
+} else {
  	B；
 }
 //指针型：
 if( NULL == flag )
 {
  	A;
-}
-else {
+} else {
  	B；
 }
 //float 型数据：
@@ -47,26 +43,79 @@ if ( ( flag >= -NORM ) && ( flag <= NORM ) )
 
 sizeof 和 strlen 有以下区别：
 1 sizeof 是一个操作符，strlen 是库函数。
+
 2 sizeof 的参数可以是数据的类型，也可以是变量，而 strlen 只能以结尾为‘\0‘的字符串作参数。
+
 3 编译器在编译时就计算出了 sizeof 的结果。而 strlen 函数必须在运行时才能计算出来。并且 sizeof 计算的是数据类型占内存的大小，而 strlen 计算的是字符串实际的长度。
+
 4 数组做 sizeof 的参数不退化，传递给 strlen 就退化为指针了。
+
 注意：有些是操作符看起来像是函数，而有些函数名看起来又像操作符，这类容易混淆的名称一定要加以区分，否则遇到数组名这类特殊数据类型作参数时就很容易出错。最容易混淆为函数的操作符就是 sizeof。
 
 ## 4.C 语言的关键字 static 和 C++ 的关键字 static 有什么区别
 
-在 C 中 static 用来修饰局部静态变量和外部静态变量、函数。而 C++中除了上述功能外，还用来定义类的成员变量和函数。即静态成员和静态成员函数。
+在 C 语言中，static 关键字有以下几个用途：
+
+1、静态变量：在函数内部使用 static 关键字声明的变量具有静态存储期，它们在整个程序的执行过程中都存在，不会在每次函数调用时创建和销毁。静态变量的作用域限定在声明它的源文件中。
+
+2、静态函数：使用 static 关键字声明的函数具有内部链接（internal linkage），只能在声明它的源文件中调用，无法被其他文件中的函数调用。
+
+3、静态全局变量：使用 static 关键字声明的全局变量具有文件作用域，它们只能在声明它们的源文件中访问，无法被其他文件中的函数或变量访问。
+
+在 C++语言中，static 关键字的用途更加多样化：
+
+1、静态成员变量：在类中声明的静态成员变量属于整个类，而不是类的某个对象。静态成员变量在所有类的对象之间共享，只有一份拷贝。可以通过类名和作用域解析运算符::来访问静态成员变量。
+
+2、静态成员函数：静态成员函数与类的对象无关，它们不具有隐式的 this 指针，因此无法访问非静态的成员变量和成员函数。静态成员函数可以直接通过类名和作用域解析运算符::来调用。
+
+```cpp
+#include <iostream>
+
+class MyClass {
+public:
+    static void static_func() {
+        std::cout << "This is a static function." << std::endl;
+    }
+
+    void non_static_func() {
+        std::cout << "This is a non-static function." << std::endl;
+    }
+};
+
+int main() {
+    MyClass::static_func();  // 输出：This is a static function.
+
+    MyClass obj;
+    obj.non_static_func();   // 输出：This is a non-static function.
+
+    return 0;
+}
+```
+
+3、静态局部变量：在函数内部使用 static 关键字声明的局部变量具有静态存储期，它们在程序执行过程中保持存在，并且只初始化一次。静态局部变量的作用域限定在声明它的函数内部。
+
+4、静态断言（C++11 及以上）：static_assert 是一个编译时的断言，用于在编译期间对表达式进行静态检查，并在不满足条件时产生编译错误。
+
 注意：编程时 static 的记忆性，和全局性的特点可以让在不同时期调用的函数进行通信，传递信息，而 C++的静态成员则可以在多个对象实例间进行通信，传递信息。
 
 ## 5.Ｃ中的 malloc 和Ｃ＋＋中的 new 有什么区别
 
 malloc 和 new 有以下不同：
+
 （1） new、delete 是操作符，可以重载，只能在 C++中使用。
+
 （2） malloc、free 是函数，可以覆盖，C、C++中都可以使用。
+
 （3） new 可以调用对象的构造函数，对应的 delete 调用相应的析构函数。
+
 （4） malloc 仅仅分配内存，free 仅仅回收内存，并不执行构造和析构函数
+
 （5） new、delete 返回的是某种数据类型指针，malloc、free 返回的是 void 指针。
+
 注意：malloc 申请的内存空间要用 free 释放，而 new 申请的内存空间要用 delete 释放，不要混用。
 因为两者实现的机理不同。
+
+在 C++中，不应该直接使用 free 函数来释放通过 new 操作符分配的对象内存。这是因为 free 函数只能正确处理通过 C 语言的内存分配函数（如 malloc、calloc）分配的内存块，而无法调用 C++对象的析构函数来正确释放对象所持有的资源。
 
 ## 6.写一个“标准”宏 MIN
 
@@ -517,7 +566,6 @@ printf( "\n" ); return;
 }
 ```
 
-​
 
 ## 26.编码实现直接选择排序
 
@@ -1558,7 +1606,6 @@ size()函数返回的是已用空间大小，capacity()返回的是总空间大�
 resize()成员函数只改变元素的数目，不改变 vector 的容量。
 
 - 空的 vector 对象，size()和 capacity()都为 0
-
 - 当空间大小不足时，新分配的空间大小为原空间大小的 2 倍。
 - 使用 reserve()预先分配一块内存后，在空间未满的情况下，不会引起重新分配，从而提升了效率。
 - 当 reserve()分配的空间比原空间小时，是不会引起重新分配的。
@@ -2538,7 +2585,7 @@ strncpy 函数：用来复制源字符串的前 n 个字符，src 和 dest 所�
 
 说明：很多时候一个变量，只是声明不分配内存空间，直到具体使用时才初始化，分配内存空间，如外部变量。
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 int main()
@@ -2552,7 +2599,7 @@ int main()
 int A;  //定义A变量
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ## 234.请简述#ifdef、#else、#endif、和#ifndef 的作用是？
 
@@ -2578,7 +2625,7 @@ printf("Indebugging.......!\r\n");
 
 ## 235.请写出 int、bool、float、指针变量与"零值"比较的 if 语句？
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 //int类型与零值比较
@@ -2598,7 +2645,7 @@ if (p == NULL)
 if (p != NULL)
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ## 236.结构体是否可以直接赋值？
 
@@ -2665,7 +2712,7 @@ if (p != NULL)
 
 ## 245.用 C 语言编写一个死循环程序？
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 while (1)
@@ -2679,7 +2726,7 @@ for (;;)
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 注意：很多种途径都可以实现同一种功能，但是不同的方式，时间和空间占用度不同，特别是对于嵌入式软件，处理器速度比较慢，存储空间有限，所以时间和空间优势是选择各种方法的首要考虑条件。
 
@@ -2761,7 +2808,7 @@ ptr = (int *)0x67a9;
 
 编码实现函数 atoi()，设计一个程序，把一个字符串转化为一个整型数值，例如：字符串"5486321"，转化成整型 5486321。
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 int myatoi(const char *str)
@@ -2801,7 +2848,7 @@ int myatoi(const char *str)
 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ## 257.C 语言的结构体和 C++的有什么区别？
 
@@ -2989,8 +3036,6 @@ bar(foo( ));
 bar("hello world");
 
 原因在于 foo( )和"hello world"串都会产生一个临时对象，而在 C++中，这些临时对象都是 const 类型的。因此上面的表达式就是试图将一个 const 类型的对象转换为非 const 类型，这是非法的。引用型参数应该在能被定义为 const 的情况下，尽量定义为 const 。
-
-##
 
 **10.将“引用”作为函数返回值类型的格式、好处和需要遵守的规则?**
 
@@ -3550,7 +3595,7 @@ SGI 二级空间配置器的原理是：当区块小于 128 字节，则以内�
 
 智能指针还有一个作用是把值语义转换成引用语义。
 
-（3）智能指针#include<memory>，unique_ptr,shared_ptr,weak_ptr（弱引用智能指针）。
+（3）智能指针#include`<memory>`，unique_ptr,shared_ptr,weak_ptr（弱引用智能指针）。
 
 （4）unique_ptr“唯一”拥有其所指对象，同一时刻只能有一个 unique_ptr 指向给定对象（通过禁止拷贝语义、只有移动语义来实现）。相比与原始指针 unique_ptr 用于其 RAII 的特性，使得在出现异常的情况下，动态资源能得到释放。unique_ptr 指针本身的生命周期：从 unique_ptr 指针创建时开始，直到离开作用域。离开作用域时，若其指向对象，则将其所指对象销毁(默认使用 delete 操作符，用户可指定其他操作)。
 
@@ -3633,11 +3678,8 @@ SGI 二级空间配置器的原理是：当区块小于 128 字节，则以内�
 再简单点理解就是：
 
 1. 同步，就是我调用一个功能，该功能没有结束前，我死等结果。
-
 2. 异步，就是我调用一个功能，不需要知道该功能结果，该功能有结果后通知我（回调通知）
-
 3. 阻塞，就是调用我（函数），我（函数）没有接收完数据或者没有得到结果之前，我不会返回。
-
 4. 非阻塞，就是调用我（函数），我（函数）立即返回，通过 select 通知调用者
 
 同步 IO 和异步 IO 的区别就在于：数据拷贝的时候进程是否阻塞
@@ -3698,11 +3740,11 @@ SGI 二级空间配置器的原理是：当区块小于 128 字节，则以内�
 
 三次握手：C----->SYN K
 
-​ S------>ACK K+1 SYN J
+ S------>ACK K+1 SYN J
 
-​ C------->ACK J+1
+ C------->ACK J+1
 
-​ DONE!
+ DONE!
 
 client 的 connect 引起 3 次握手
 
@@ -4238,7 +4280,7 @@ dynamic_cast 如果不能转换返回 NULL
 
 dynamic_cast 转为引用类型的时候转型失败会抛 bad_cast
 
-源类中必须要有虚函数，保证多态，才能使用 dynamic_cast<source>(expression)
+源类中必须要有虚函数，保证多态，才能使用 dynamic_cast`<source>`(expression)
 
 3）const_cast
 
@@ -4366,11 +4408,11 @@ vector 和数组类似，拥有一段连续的内存空间。vector 申请的是
 
 list 是由双向链表实现的，因此内存空间是不连续的。只能通过指针访问数据，所以 list 的随机存取非常没有效率，时间复杂度为 o(n); 但由于链表的特点，能高效地进行插入和删除。
 
-vector 拥有一段连续的内存空间，能很好的支持随机存取，因此 vector<int>::iterator 支持“+”，“+=”，“<”等操作符。
+vector 拥有一段连续的内存空间，能很好的支持随机存取，因此 vector`<int>`::iterator 支持“+”，“+=”，“<”等操作符。
 
-list 的内存空间可以是不连续，它不支持随机访问，因此 list<int>::iterator 则不支持“+”、“+=”、“<”等
+list 的内存空间可以是不连续，它不支持随机访问，因此 list`<int>`::iterator 则不支持“+”、“+=”、“<”等
 
-vector<int>::iterator 和 list<int>::iterator 都重载了“++”运算符。
+vector`<int>`::iterator 和 list`<int>`::iterator 都重载了“++”运算符。
 
 总之，如果需要高效的随机存取，而不在乎插入和删除的效率，使用 vector;
 
@@ -4430,7 +4472,7 @@ friend class 类名;
 
 (3) 友元关系不具有传递性。若类 B 是类 A 的友元，类 C 是 B 的友元，类 C 不一定是类 A 的友元，同样要看类中是否有相应的申明
 
-## 368.c++函数库<algorithm>中一些实用的函数
+## 368.c++函数库`<algorithm>`中一些实用的函数
 
 1. \_\_gcd(x, y)
 
@@ -4462,7 +4504,7 @@ vector 也可以：fill(v.begin(), v.end(), 要填入的内容);
 
 fill(vector.begin(), cnt, val); // 从当前起始点开始，将之后的 cnt 个元素赋值为 val。
 
-memset(arr, val, cnt); // 在头文件<cstring>里。
+memset(arr, val, cnt); // 在头文件`<cstring>`里。
 
 将数组 a 中的每一个元素都赋成 x，跟 memset 的区别是，memset 函数按照字节填充，所以一般 memset 只能用来填充 char 型数组，（因为只有 char 型占一个字节）如果填充 int 型数组，除了 0 和-1，其他的不能。
 
@@ -4488,9 +4530,9 @@ memset(arr, val, cnt); // 在头文件<cstring>里。
 
 ## 371.C++多线程有几种实现方法，都是什么？
 
-#include <thread>
+#include `<thread>`
 #include <condition_variable>
-#include <mutex>
+#include `<mutex>`
 1 std::thread
 
 关键点
@@ -5257,7 +5299,7 @@ https://blog.csdn.net/weixin_49303682/article/details/118662325
 
 ## **446.给定一个整型变量 a，写两段代码，第一个设置 a 的 bit3，第二个清除 a 的 bit，在以上两个操作中，要保持其它位不变。**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 #define BIT3 (0x1<<3)
@@ -5272,7 +5314,7 @@ https://blog.csdn.net/weixin_49303682/article/details/118662325
 10 　　}
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ## **447.什么是右值引用，跟左值又有什么区别**
 
@@ -5315,7 +5357,7 @@ float:1bit(符号位)+8bit(指数位)+23（尾数位） 2^23=8388608，共 7 位
 
 double:1bit(符号位)+11bit（指数位）+52bit(尾数位) 2^52=4503599627370496. 一共 16 位，同理 double 的精度为 15~16 位。
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 #include <stdio.h>
@@ -5328,7 +5370,7 @@ double:1bit(符号位)+11bit（指数位）+52bit(尾数位) 2^52=45035996273704
 8 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 输出：3.140000,10.500000 因为%lf 只保留小数点后 6 位。
 
@@ -5416,7 +5458,7 @@ printf(“%10d”,101010); 在%和 d 之间加上数字宽度，就可以右对�
 
 ## **459.惰性计算方法**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 #include "stdio.h"
@@ -5428,7 +5470,7 @@ printf(“%10d”,101010); 在%和 d 之间加上数字宽度，就可以右对�
 7 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 输出的正确答案是1  2
@@ -5448,7 +5490,7 @@ printf(“%10d”,101010); 在%和 d 之间加上数字宽度，就可以右对�
 
 ## **461.用预处理指令#define 声明一个常数，用以表明 1 年中有多少秒(忽略闰年问题)**
 
-\#define SECONDS_PER_YEAR (60 _ 60 _ 24 \* 365)UL
+\#define SECONDS*PER_YEAR (60 * 60 \_ 24 \* 365)UL
 
 ## **462.写一个“标准”宏 MIN，这个宏输入两个参数并返回较小的一个**
 
@@ -5506,7 +5548,7 @@ C++函数的三种传递方式为：值传递、指针传递和引用传递。
 
 多态性：是将父类对象设置成为和一个或更多它的子对象相等的技术。用子类对象给父类对象赋值之后，父类对象就
 
-​ 可以根据当前赋值给它的子对象的特性以不同的方式运作。
+ 可以根据当前赋值给它的子对象的特性以不同的方式运作。
 
 ## 470.简述多态的原理
 
@@ -5561,7 +5603,7 @@ C++函数的三种传递方式为：值传递、指针传递和引用传递。
 
 ## 475.用 C++设计一个不能继承的类
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 template <typename T>
@@ -5588,7 +5630,7 @@ C++函数的三种传递方式为：值传递、指针传递和引用传递。
 22 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ## **476.构造函数能否为虚函数**
 
@@ -5606,7 +5648,7 @@ const 修饰的变量是只读的，本质上还是变量，与 C 语言不同�
 
 **_C 语言中的 const 还是可变的：_**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 int main()
@@ -5621,11 +5663,11 @@ const 修饰的变量是只读的，本质上还是变量，与 C 语言不同�
 10 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 由于 c++中 const 常量的值在编译期就已经决定，下面的做法是 OK 的，但是 c 中是编译通不过的。
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 int main(void)
@@ -5637,7 +5679,7 @@ const 修饰的变量是只读的，本质上还是变量，与 C 语言不同�
 7 }
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ## **478.宏和内联（inline）函数的比较？**
 
@@ -5767,11 +5809,11 @@ deque 双端数组，可以在头尾两端分别做元素的插入和删除操�
 
 list 双向链表，**相较于 vector 的连续线性空间，list 就显得负责许多，它的好处是每次插入或者删除一个元素，就是**配置或者释放一个元素的空间，适合频繁的不确实位置元素的移除插入。
 
-set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(logn)`时间内**高效的做查找，插入和删除。
+set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在 `O(logn)`时间内**高效的做查找，插入和删除。
 
 ## **490.陷阱题**
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 int main()
@@ -5785,9 +5827,9 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 9  输出为5；如果再加上if(i=3)j=6;则输出6。
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 int main(void)
@@ -5802,9 +5844,9 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 10  被当成了无符号数，它远远大于6，所以得到上述结果。
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 main()
@@ -5816,9 +5858,9 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 7  *(a+1）就是a[1]，*(ptr-1)就是a[4],执行结果是2，5
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 int main()
@@ -5832,9 +5874,9 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 9 将字符串赋值给字符变量，内存不够，存在越界。
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 void test(void) {
@@ -5847,9 +5889,9 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 8 野指针问题
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 wap( int* p1,int* p2 )
@@ -5862,9 +5904,9 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 8 段错误，p没有空间，为其分配空间或者不使用指针
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 char *RetMenory(void)
@@ -5914,7 +5956,7 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 45 所以，我们要记住函数传参的两种方式：1）值传递 2）地址传递。
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 下面两种if语句判断方式。请问哪种写法更好？为什么？
@@ -5924,7 +5966,7 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 5 【答案】这是一个风格问题，第二种方式如果少了个=号,编译时就会报错,减少了出错的可能行,可以检测出是否少了=。
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 #include "stdafx.h"
@@ -5966,9 +6008,9 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 37 human over…
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
  1 以下三条输出语句分别输出什么？
@@ -5984,7 +6026,7 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 11 【答案】分别输出false,false,true。str1和str2都是字符数组，每个都有其自己的存储区，它们的值则是各存储区首地址，不等；str3和str4同上，只是按const语义，它们所指向的数据区不能修改。str5和str6并非数组而是字符指针，并不分配存储区，其后的“abc”以常量形式存于静态数据区，而它们自己仅是指向该区首地址的指针，相等。
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 int a=5, b=7, c;
@@ -5992,7 +6034,7 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 3 【答案】a=6,b=7,c=12
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 ```
 1 一个栈的入栈序列是A，B，C，D，E，则栈的不可能的输出序列是（ ）
@@ -6003,7 +6045,7 @@ set 二叉树，map 二叉树，底层实现都是 红黑树，**它可以在`O(
 6 【答案】C
 ```
 
-[![复制代码](https://common.cnblogs.com/images/copycode.gif)](<javascript:void(0);>)
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
 
 原文作者：[xiaogudexuexibiji](https://www.cnblogs.com/xiaogudexuexibiji/)
 
@@ -6213,11 +6255,11 @@ TCP 四层模型：
 >
 > int pthread_create(pthread_t \*restrict thread,
 >
-> ​ const pthread_attr_t \*restrict attr,
+>  const pthread_attr_t \*restrict attr,
 >
-> ​ void *(*start_routine)(void\*),
+>  void *(*start_routine)(void\*),
 >
-> ​ void \*restrict arg);
+>  void \*restrict arg);
 
 线程终止：
 
@@ -6438,7 +6480,6 @@ main()========
 归纳一下就是：
 
 - 可以取地址的，有名字的，非临时的就是左值
-
 - 不能取地址的，没有名字的，临时的，通常生命周期就在某个表达式之内的就是右值
 
 但是到了 C++11 之后概念变的略微复杂，引入了 lvalue, glvalue, rvalue, xvalue 和 prvalue。具体可以参考 What are rvalues, lvalues, xvalues, glvalues, and prvalues?
@@ -6466,13 +6507,9 @@ unique_ptr 中拷贝构造函数和赋值操作符都声明为 delete 或 privat
 智能指针使用注意事项：
 
 - 不使用相同的内置指针值初始化，或 reset 多个智能指针
-
 - 不 delete get()返回的指针
-
 - 不使用 get()初始化或 reset 另一个智能指针
-
 - get()返回的智能指针可能变成 dangling pointer
-
 - 如果智能指针管理的内存不是 new 出来的，需要提供删除器
 
 拓展问题
@@ -6927,15 +6964,15 @@ Stack& operator=(const Stack &src)
 		if (this == &src)
  	    	return *this;
 
-​		delete[]mpstack;
+		delete[]mpstack;
 
-​		msize = src.msize;
-​		mtop = src.mtop;
-​		mpstack = new int[src.msize];
-​		for (int i = 0; i < mtop; ++i) {
+		msize = src.msize;
+		mtop = src.mtop;
+		mpstack = new int[src.msize];
+		for (int i = 0; i < mtop; ++i) {
    			 mpstack[i] = src.mpstack[i];
-​		}
-​		return *this;
+		}
+		return *this;
 }
 
 int getSize()
@@ -7324,7 +7361,7 @@ STL 六大组件：容器（Container）、算法（Algorithm）、迭代器（I
 
 如果 stack 中存放的是较大是内容时，比如 vector 类型，取值的时候就会发生拷贝，如果拷贝失败，这是，
 
-假设有一个 stack<vector>，vector 是一个动态容器，当你拷贝一个 vector 时，标准库会从堆上分配很多内存来完成这次拷贝。当这个系统处在重度负荷，或有严重的资源限制的情况下，这种内存分配就会失败，所以 vector 的拷贝构造函数可能会抛出一个 std::bad_alloc 异常。当 vector 中存有大量元素时，这种情况发生的可能性更大。当 pop()函数返回“弹出值”时(也就是从栈中将这个值移除)，会有一个潜在的问题：这个值被返回到调用函数的时候，栈才被改变；但当拷贝数据的时候，调用函数抛出一个异常会怎么样？如果事情真的发生了，要弹出的数据将会丢失；它的确从栈上移出了，但是拷贝失败了！std::stack 的设计人员将这个操作分为两个部分：先获取顶部元素(top())，然后从栈中移除元素(pop())。这样，在不能安全的将元素拷贝出去的情况下，栈中的这个数据还依旧存在，没有丢失。当问题是堆空间不足时，应用可能会释放一些内存，然后再进行尝试。
+假设有一个 stack`<vector>`，vector 是一个动态容器，当你拷贝一个 vector 时，标准库会从堆上分配很多内存来完成这次拷贝。当这个系统处在重度负荷，或有严重的资源限制的情况下，这种内存分配就会失败，所以 vector 的拷贝构造函数可能会抛出一个 std::bad_alloc 异常。当 vector 中存有大量元素时，这种情况发生的可能性更大。当 pop()函数返回“弹出值”时(也就是从栈中将这个值移除)，会有一个潜在的问题：这个值被返回到调用函数的时候，栈才被改变；但当拷贝数据的时候，调用函数抛出一个异常会怎么样？如果事情真的发生了，要弹出的数据将会丢失；它的确从栈上移出了，但是拷贝失败了！std::stack 的设计人员将这个操作分为两个部分：先获取顶部元素(top())，然后从栈中移除元素(pop())。这样，在不能安全的将元素拷贝出去的情况下，栈中的这个数据还依旧存在，没有丢失。当问题是堆空间不足时，应用可能会释放一些内存，然后再进行尝试。
 
 参考：为什么适配器 stack 中成员函数 top()和 pop()需要分离实现
 
@@ -7333,15 +7370,12 @@ STL 六大组件：容器（Container）、算法（Algorithm）、迭代器（I
 map 的内部实现是一个红黑树（红黑树是非严格平衡二叉搜索树，而 AVL 是严格平衡二叉搜索树），其具有如下性质：
 
 - 红黑树具有自动排序的功能，因此 map 内部的所有元素都是有序的
-
 - 查找、插入、删除的时间复杂度为 log(n)
-
 - map 中的元素是按照二叉搜索树（又名二叉查找树、二叉排序树，特点就是左子树上所有节点的键值都小于根节点的键值，右子树所有节点的键值都大于根节点的键值）存储的，使用中序遍历可将键值按照从小到大遍历出来。
 
 unordered_map 的内部实现是 hash 表。其具有如下性质：
 
 - 查找、插入、删除的平均时间复杂度可达到 O(1)
-
 - 哈希表的建立比较耗费时间，占用内存相比红黑树要高
 
 一般情况下会使用 map，因为 unordered_map 的构建费时。对于查找问题，unordered_map 会更加高效一些，因此遇到查找问题，常会考虑优先用 unordered_map。
@@ -7349,9 +7383,7 @@ unordered_map 的内部实现是 hash 表。其具有如下性质：
 问题拓展：
 
 - 什么是红黑数？红黑树是一种二叉查找树，但在每个节点增加一个存储位表示节点的颜色，可以是红或黑（非红即黑）。通过对任何一条从根到叶子的路径上各个节点着色的方式的限制，红黑树确保没有一条路径会比其它路径长出两倍，因此，红黑树是一种弱平衡二叉树，相对于要求严格的 AVL 树来说，它的旋转次数少，所以对于搜索，插入，删除操作较多的情况下，通常使用红黑树。
-
 - 什么是 AVL?红黑树是在 AVL 树的基础上提出来的。平衡二叉树又称为 AVL 树，是一种特殊的二叉排序树。其左右子树都是平衡二叉树，且左右子树高度之差的绝对值不超过 1。AVL 树中所有结点为根的树的左右子树高度之差的绝对值不超过 1。将二叉树上结点的左子树深度减去右子树深度的值称为平衡因子 BF，那么平衡二叉树上的所有结点的平衡因子只可能是-1、0 和 1。只要二叉树上有一个结点的平衡因子的绝对值大于 1，则该二叉树就是不平衡的。
-
 - map 为什么用红黑树，而不是 AVL？AVL 树是高度平衡的，频繁的插入和删除，会引起频繁的 rebalance，导致效率下降；红黑树不是高度平衡的，算是一种折中，查找，插入删除的性能都是 O(logn)，且性能稳定（插入最多两次旋转，删除最多三次旋转）。
   ————————————————
   版权声明：本文为 CSDN 博主「kuweicai」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
@@ -7912,7 +7944,7 @@ C++语言支持函数重载，C 语言不支持函数重载。函数被 C++编�
 ## 605.用预处理指令#define 声明一个常数，用以表明 1 年中有多少秒（忽略闰年问题）
 
 正确答案：
-#define SECONDS_PER_YEAR (60 _ 60 _ 24 \* 365)UL 我在这想看到几件事情：
+#define SECONDS*PER_YEAR (60 * 60 \_ 24 \* 365)UL 我在这想看到几件事情：
 
 1). #define 语法的基本知识（例如：不能以分号结束，括号的使用，等等）
 
@@ -11033,17 +11065,17 @@ BOOL DeteleNode(Node *pHeader, DataType Value)
           pNode->front->next = pNode->next;
       }
 
-​     Node *pNextNode = pNode->next;
-​     delete pNode;
-​     pNode = pNextNode;
+     Node *pNextNode = pNode->next;
+     delete pNode;
+     pNode = pNextNode;
 
-​    bRet = TRUE;
-​    / /不要break或return, 删除所有
-​     }
-​     else
-​    {
-​      pNode = pNode->next;
-​    }
+    bRet = TRUE;
+    / /不要break或return, 删除所有
+     }
+     else
+    {
+      pNode = pNode->next;
+    }
   }
 
 return bRet;
@@ -11198,7 +11230,7 @@ constructor
 
 ## 851.写出 float x 与“零值”比较的 if 语句。
 
-if(x>0.000001&&x<-0.000001)  
+if(x>0.000001&&x<-0.000001)
 这个都够古董的, 恐怕是 8086 以前的事情吧. 汇编早都可以用一条指令比较了. 既然想考精度，就换个不是 0 的，比如 0.00002 ， if(x-0.00002>0.000001&&x-0.0002<-0.000001)
 
 ## 852.进程间通信的方式有?
@@ -12546,27 +12578,27 @@ C++中命名空间概念用于解决名称冲突问题
 
 (1)在 C 语言中只有一个全局作用域
 
-​ ①C 语言中所有的全局标识符共享同一个作用域
+ ①C 语言中所有的全局标识符共享同一个作用域
 
-​ ② 标识符之间可能发生冲突
+ ② 标识符之间可能发生冲突
 
 (2)C++中提出了命名空间的概念
 
-​ ① 命名空间将全局作用域分成不同的部分
+ ① 命名空间将全局作用域分成不同的部分
 
-​ ② 不同命名空间中的标识符可以同名而不会发生冲突
+ ② 不同命名空间中的标识符可以同名而不会发生冲突
 
-​ ③ 命名空间可以相互嵌套
+ ③ 命名空间可以相互嵌套
 
-​ ④ 全局作用域也叫默认命名空间
+ ④ 全局作用域也叫默认命名空间
 
 (3)C++命名空间的定义:namespace Name {}
 
-​ ① 使用整个命名空间:using namespace name;
+ ① 使用整个命名空间:using namespace name;
 
-​ ② 使用命名空间中的变量:using name::variable;
+ ② 使用命名空间中的变量:using name::variable;
 
-​ ③ 使用默认命名空间中的变量: ::variable
+ ③ 使用默认命名空间中的变量: ::variable
 
 ## 923.C 和 C++相互调用
 
@@ -13000,7 +13032,7 @@ malloc 和 free 函数
 
 ## 954.数组参数
 
-​ 数组作为函数参数时，编译器将其编译为对应的指针。因此，一般情况下，当定义的函数中有数组参数时，需要定义另一个参数来标示数组的大小。
+ 数组作为函数参数时，编译器将其编译为对应的指针。因此，一般情况下，当定义的函数中有数组参数时，需要定义另一个参数来标示数组的大小。
 
 void f(int a[])等价于 void f(int\* a);
 
@@ -13153,9 +13185,9 @@ char c = getchar(); //getchar 的返回值实际上是 int 类型,而不是 char
 （1）#pragma 用于指示编译器完成一些特定的动作
 （2）#pragma 所定义的很多指示字是编译器特有的，在不同的编译器间是不可移植的
 
-​ ① 预处理器将忽略它不认识的#pragma 指令
+ ① 预处理器将忽略它不认识的#pragma 指令
 
-​ ② 不同编译器可能以不同的方式解释同一条#pragma 指令
+ ② 不同编译器可能以不同的方式解释同一条#pragma 指令
 
 （3）一般用法：#pragma parameter //注意，不同的 parameter 参数语法和意义不同
 
@@ -13272,21 +13304,21 @@ C 语言中的条件编译的行为类似于 C 语言中的 if…else…，是�
 （3）if…else…语句在运行期进行分支判断 ，条件编译指令在预编译期进行分支判断
 （4）可以通过命令行定义宏
 
-​ ①gcc –Dmarco=value file.c //针对#if 语句
+ ①gcc –Dmarco=value file.c //针对#if 语句
 
-​ ②gcc –Dmarco file.c //针对#ifdef 或 ifndef 语句
+ ②gcc –Dmarco file.c //针对#ifdef 或 ifndef 语句
 
 2.条件编译的意义
 
-​ （1）条件编译使得我们可以按不同的条件编译不同的代码段，因而可以产生不同的目标代码。
+ （1）条件编译使得我们可以按不同的条件编译不同的代码段，因而可以产生不同的目标代码。
 
-​ （2）#if…#else…#endif 被预编译器处理，而 if…else…语句被编译器处理，必然被编译进目标代码。
+ （2）#if…#else…#endif 被预编译器处理，而 if…else…语句被编译器处理，必然被编译进目标代码。
 
-​ （3）实际工程中条件编译主要用于以下两种情况：
+ （3）实际工程中条件编译主要用于以下两种情况：
 
-​ ① 不同的产品线共用一份代码
+ ① 不同的产品线共用一份代码
 
-​ ② 区分编译产品的调试版和发布版
+ ② 区分编译产品的调试版和发布版
 
 ## 976.C 语言中函数和宏定义的对比
 
@@ -13452,7 +13484,7 @@ volatile 是一个类型修饰符（type specifier），就像我们熟悉的 co
 
 ## 989.如何引用一个已经定义过的全局变量？
 
-​ 可以用引用头文件的方式，也可以用 extern 关键字，如果用引用头文件方式来引用某个在头文件中声明的全局变理，假定你将那个变量写错了，那么在编译期间会报错，如果你用 extern 方式引用时，假定你犯了同样的错误，那么在编译期间不会报错，而在连接期间报错。
+ 可以用引用头文件的方式，也可以用 extern 关键字，如果用引用头文件方式来引用某个在头文件中声明的全局变理，假定你将那个变量写错了，那么在编译期间会报错，如果你用 extern 方式引用时，假定你犯了同样的错误，那么在编译期间不会报错，而在连接期间报错。
 
 ## 990.大小端问题
 
@@ -13467,7 +13499,7 @@ typedef int size;此声明定义了一个 int 的同义字，名字为 size
 
 ## 992.什么是封装？C++中是如何实现的？
 
-​ 封装来源于信息隐藏的设计理念， 是通过特性和行为的组合来创建新数据类型让接口与具体实现相隔离。C++中是通过类来实现的， 为了尽量避免某个模块的行为干扰同一系统中的其它模块，应该让模块仅仅公开必须让外界知道的接口。
+ 封装来源于信息隐藏的设计理念， 是通过特性和行为的组合来创建新数据类型让接口与具体实现相隔离。C++中是通过类来实现的， 为了尽量避免某个模块的行为干扰同一系统中的其它模块，应该让模块仅仅公开必须让外界知道的接口。
 
 ## 993.C 与 C++各自是如何定义常量的？有什么不同？
 
